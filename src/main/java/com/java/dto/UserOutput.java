@@ -1,6 +1,10 @@
 package com.java.dto;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,7 +20,7 @@ public class UserOutput {
 	private String name;
 	private String address;
 	private long phoneNumber;
-	private List<Role> roles;
+	private Map<String, List<String>> roles;
 
 	private UserOutput() {
 	}
@@ -28,7 +32,17 @@ public class UserOutput {
 	 * @return
 	 */
 	public static UserOutput getInstance(User user) {
+		 Map<String, List<String>> roles= new HashMap<>();
+		 user.getUserCredential().getRoles().stream().forEach(x-> {
+			try {
+				roles.put(x.getRname(), x.getPrivileges().stream().map((Privilege y)-> y.getPname()).collect(Collectors.toList()));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		System.out.println("user credential is "+ user.getUserCredential());
 		return UserOutput.builder().name(user.getName()).userId(user.getUserId()).address(user.getAddress())
-				.phoneNumber(user.getPhoneNumber()).roles(user.getUserCredentials().getRoles()).build();
+				.phoneNumber(user.getPhoneNumber()).roles(roles).build();
 	}
 }

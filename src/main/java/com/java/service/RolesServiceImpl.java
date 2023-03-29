@@ -2,6 +2,8 @@ package com.java.service;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ public class RolesServiceImpl implements RolesService {
 		role.getPrivileges().forEach(p -> {
 			try {
 				privilegeRepository.save(p);
-			} catch (Exception e) {
+			} catch (EntityExistsException e) {
 			}
 		});
 		return roleRepository.save(role);

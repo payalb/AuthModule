@@ -10,18 +10,19 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import org.springframework.hateoas.RepresentationModel;
-
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @Table(name= "userinfo")
 @Entity
 @NoArgsConstructor
-public class User extends RepresentationModel<User>{
+@AllArgsConstructor
+@Builder
+
+public class User{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,7 +33,7 @@ public class User extends RepresentationModel<User>{
 	private String address;
 	private long phoneNumber;
 	//Using OneToOne instead of Embedded to provide database table level grants
-	@OneToOne(fetch = FetchType.EAGER)
-	private UserCredentials userCredentials;
+	@OneToOne(fetch = FetchType.EAGER, optional = false)
+	private UserCredential userCredential;
 
 }

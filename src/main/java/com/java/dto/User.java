@@ -1,28 +1,38 @@
 package com.java.dto;
 
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
-import lombok.Data;
+import org.springframework.hateoas.RepresentationModel;
 
-@Data
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Table(name= "userinfo")
 @Entity
-@Table(name = "UserInfo")
-public class User {
-
-	@Id
-	private String username;
-	@NotEmpty
-	private String password;
-	@NotEmpty
-	@ManyToMany(fetch = FetchType.EAGER)
-	//@Cascade(CascadeType.SAVE_UPDATE)
-	private List<Role> roles;
+@NoArgsConstructor
+public class User extends RepresentationModel<User>{
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int userId;
+	@NotEmpty
+	@Size(min = 3, max = 30)
+	private String name;
+	private String address;
+	private long phoneNumber;
+	//Using OneToOne instead of Embedded to provide database table level grants
+	@OneToOne(fetch = FetchType.EAGER)
+	private UserCredentials userCredentials;
+
 }

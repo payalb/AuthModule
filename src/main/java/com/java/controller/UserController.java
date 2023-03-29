@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.java.dto.User;
+import com.java.dto.UserInput;
 import com.java.dto.UserOutput;
 import com.java.service.UserService;
 
@@ -29,9 +30,9 @@ public class UserController {
 	@Autowired UserService userService;
 	
 	@PostMapping
-	public ResponseEntity<Void> createUser(@RequestBody User user) throws URISyntaxException{
-		System.out.println("User received: "+ user);
-		userService.save(user);
+	public ResponseEntity<Void> createUser(@RequestBody UserInput userInput) throws URISyntaxException{
+		System.out.println("User received: "+ userInput);
+		 User user= userService.save(UserInput.getUserObject(userInput));
 		 URI pathString = WebMvcLinkBuilder.linkTo(UserController.class).slash(user.getUserId()).toUri()
 				 ;
 		 return ResponseEntity.created(pathString).build();

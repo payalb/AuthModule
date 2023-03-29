@@ -10,28 +10,27 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class Role {
 	@Id
 	private String rname;
+	
+	@EqualsAndHashCode.Exclude
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "role_privilege",
 	joinColumns = @JoinColumn(name = "rname", referencedColumnName = "rname"),
 	inverseJoinColumns = @JoinColumn(name = "pname", referencedColumnName = "pname"))
-
 	private List<Privilege> privileges;
 	
-	public Role(String name){
-		this.rname= name;
+	public Role(String rname){
+		this.rname= rname;
 	}
 
 	

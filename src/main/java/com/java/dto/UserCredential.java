@@ -8,12 +8,18 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotEmpty;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @Entity
-public class UserCredentials {
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UserCredential {
 
 	@Id
 	private String username;

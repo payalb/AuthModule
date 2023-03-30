@@ -11,11 +11,13 @@ import com.java.dto.User;
 
 
 public interface UserService {
-	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+	
 	public User save(User user) ;
 
 	public Page<User> getAllUsers(int offset, int limit);
 
 	public Optional<User> findUserById(int id);
+
+	public void delete(User user);
 
 }

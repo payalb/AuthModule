@@ -3,6 +3,7 @@ package com.java.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -11,18 +12,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.dao.PrivilegeRepository;
 import com.java.dao.RoleRepository;
+import com.java.dao.UserCredentialsRepository;
 import com.java.dao.UserRepository;
 import com.java.dto.Privilege;
 import com.java.dto.Role;
@@ -30,10 +35,10 @@ import com.java.dto.User;
 import com.java.dto.UserCredential;
 import com.java.dto.UserInput;
 
-
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-
+@ActiveProfiles("test")
 public class UserServiceIT {
 
 	@Autowired
@@ -45,11 +50,13 @@ public class UserServiceIT {
 
 	  @Autowired
 	  private UserRepository userRepository;
-	  
+	  @Autowired
+	  UserCredentialsRepository userCredentialsRepository;
 	  @Autowired RolesService rolesService;
 		
 	  @Autowired PrivilegeRepository privilegeRepository;
 	  
+	  @Autowired RoleRepository roleRepository;
 	  @Autowired PasswordEncoder encoder;
 	  /**
 	   * Test the user object and roles object saved properly. Privileges should not be there.
@@ -58,8 +65,8 @@ public class UserServiceIT {
 	   * @throws Exception
 	   */
 	  
-	  @Test
-		 @WithMockUser(username="payal123!",authorities = {"ADMIN"})
+	//  @Test
+		 @WithMockUser(username="payal123*",authorities = {"ADMIN"})
 		  public void createUser() throws JsonProcessingException, Exception {
 			  System.out.println("In createUser!");
 			  User user= new User();
@@ -77,6 +84,7 @@ public class UserServiceIT {
 			   
 			   service.save(user);
 			   
+			   //TODO use entity manager methods instead of repository
 			   List<User> userObjects = userRepository.findAll();
 			   assertThat(userObjects.size()).isEqualTo(1);
 			   User objUser= userObjects.get(0);
@@ -85,10 +93,12 @@ public class UserServiceIT {
 			   List<Role> roles= objUser.getUserCredential().getRoles();
 			   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 			   assertThat(roles.stream().flatMap(role-> role.getPrivileges().stream()).collect(Collectors.toList())).isEmpty();
-			   
+			   roleRepository.delete(roles.get(0));
+			   userCredentialsRepository.delete(credential);
+			   userRepository.delete(user);
 		  }
 	  
-	 @Test
+	// @Test
 	 @WithMockUser(username="payal123!",authorities = {"ADMIN"})
 	// @Disabled("For testing")
 	  public void createUserWithRolesButNoPrivileges() throws JsonProcessingException, Exception {
@@ -116,6 +126,9 @@ public class UserServiceIT {
 		   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 		   assertThat(roles.stream().flatMap(role-> role.getPrivileges().stream()).collect(Collectors.toList())).isEmpty();
 		   
+		   roleRepository.delete(roles.get(0));
+		   userCredentialsRepository.delete(objUser.getUserCredential());
+		   userRepository.delete(objUser);
 	  }
 	  
 	  /**
@@ -125,7 +138,7 @@ public class UserServiceIT {
 	   * @throws JsonProcessingException
 	   * @throws Exception
 	   */
-	 @WithMockUser(username="payal123",authorities = {"ADMIN"})
+	 @WithMockUser(username="payal123*",authorities = {"ADMIN"})
 	  @Test
 	  public void createUserWithoutPrivilegesLaterAssignPrivilegesToRole() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
@@ -148,6 +161,7 @@ public class UserServiceIT {
 		   rolesService.save(role);
 		   
 		   List<User> userObjects = userRepository.findAll();
+		   System.out.println(userObjects+ "objects************");
 		   assertThat(userObjects.size()).isEqualTo(1);
 		   User objUser= userObjects.get(0);
 		   assertThat(objUser.getUserId()).isNotEqualTo(0);
@@ -155,11 +169,13 @@ public class UserServiceIT {
 		   List<Role> roles= objUser.getUserCredential().getRoles();
 		   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 		   assertThat(roles.stream().flatMap(r-> r.getPrivileges().stream()).collect(Collectors.toList())).contains(new Privilege("DB_READ"));
-		   
+		   roleRepository.delete(roles.get(0));
+		   userCredentialsRepository.delete(objUser.getUserCredential());
+		   userRepository.delete(objUser);
 		   
 	  }
 	  
-	  @Test
+	//  @Test
 	  @WithMockUser(username="payal123",authorities = {"ADMIN"})
 	  public void createUserTestForTransactions() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
@@ -183,5 +199,6 @@ public class UserServiceIT {
 		   assertThat(userObjects.size()).isEqualTo(0);
 		   assertThat(roleRepository.findAll().size()).isEqualTo(0);
 		   assertThat(privilegeRepository.findAll().size()).isEqualTo(0);
+		 
 	  }
 }

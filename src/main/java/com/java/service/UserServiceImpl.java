@@ -9,6 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.java.dao.PrivilegeRepository;
 import com.java.dao.RoleRepository;
@@ -21,6 +24,7 @@ import com.java.dto.UserCredential;
 
 
 @Service
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
 public class UserServiceImpl implements UserService{
 
 	@Autowired UserRepository repository;
@@ -63,6 +67,12 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public Optional<User> findUserById(int  id) {
 		return repository.findById(id);
+	}
+
+	@Override
+	public void delete(User user) {
+		repository.delete(user);
+		
 	}
 	
 }

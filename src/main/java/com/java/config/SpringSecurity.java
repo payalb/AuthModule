@@ -62,7 +62,7 @@ public class SpringSecurity {
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 		http.authorizeRequests()
         .antMatchers(HttpMethod.POST, "/v1/users/login").permitAll()
-        // Our private endpoints
+        .antMatchers("/h2-console/**").permitAll()
         .anyRequest().authenticated();
 		return http.build();
 

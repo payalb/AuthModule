@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService{
 		logger.info("user is "+ user);
 		user.setUserCredential(userCredential);
 		logger.info("user is "+ user);
-		return repository.saveAndFlush(user);
+		return repository.save(user);
 		
 	}
 

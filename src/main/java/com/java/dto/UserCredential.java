@@ -30,7 +30,7 @@ public class UserCredential {
 	private String password;
 	
 	@NotEmpty
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@Builder.Default
 	private List<Role> roles= new ArrayList<>();
 	

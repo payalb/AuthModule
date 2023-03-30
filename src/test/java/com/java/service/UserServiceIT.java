@@ -6,11 +6,13 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,8 +52,6 @@ public class UserServiceIT {
 		
 	  @Autowired PrivilegeRepository privilegeRepository;
 	  
-	  @MockBean RoleRepository roleRepository;
-	  
 	  @Autowired PasswordEncoder encoder;
 	  /**
 	   * Test the user object and roles object saved properly. Privileges should not be there.
@@ -72,7 +72,9 @@ public class UserServiceIT {
 			   UserCredential credential= new UserCredential();
 			   credential.setPassword(encoder.encode("abc"));
 			   credential.setUsername("abc");
-			   credential.setRoles(List.of(new Role("ADMIN")));
+			   List<Role> rolesList= new ArrayList<>();
+			   rolesList.add(new Role("ADMIN"));
+			   credential.setRoles(rolesList);
 			   user.setUserCredential(credential);
 			   
 			   service.save(user);
@@ -90,7 +92,7 @@ public class UserServiceIT {
 	  
 	 @Test
 	 @WithMockUser(username="payal123!",authorities = {"ADMIN"})
-	 @Disabled("For testing")
+	// @Disabled("For testing")
 	  public void createUserWithRolesButNoPrivileges() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
 		  UserInput user= new UserInput();
@@ -127,7 +129,6 @@ public class UserServiceIT {
 	   */
 	 @WithMockUser(username="payal123",authorities = {"ADMIN"})
 	  @Test
-	  @Disabled("For testing")
 	  public void createUserWithoutPrivilegesLaterAssignPrivilegesToRole() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
 		  UserInput user= new UserInput();
@@ -162,7 +163,6 @@ public class UserServiceIT {
 	  
 	  @Test
 	  @WithMockUser(username="payal123",authorities = {"ADMIN"})
-	  @Disabled
 	  public void createUserTestForTransactions() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
 		  UserInput user= new UserInput();
@@ -172,7 +172,7 @@ public class UserServiceIT {
 		   user.setPassword(encoder.encode("abc"));
 		   user.setUsername("abc");
 		   user.setRoles(List.of(new Role("ADMIN", List.of(new Privilege("DB_WRITE"), new Privilege("DB_READ")))));
-		   
+		   RoleRepository roleRepository= Mockito.mock(RoleRepository.class);
 		   when(roleRepository.save(any())).thenThrow(new RuntimeException());
 		   try {
 		   mockMvc.perform(post("/v1/users")

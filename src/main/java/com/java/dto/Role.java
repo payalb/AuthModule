@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,12 +21,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Table(name= "userrole")
 public class Role {
 	@Id
 	private String rname;
 	
 	@EqualsAndHashCode.Exclude
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "role_privilege",
 	joinColumns = @JoinColumn(name = "rname", referencedColumnName = "rname"),
 	inverseJoinColumns = @JoinColumn(name = "pname", referencedColumnName = "pname"))

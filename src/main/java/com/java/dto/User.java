@@ -34,7 +34,7 @@ public class User{
 	private String address;
 	private long phoneNumber;
 	//Using OneToOne instead of Embedded to provide database table level grants
-	@OneToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.PERSIST)
+	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	private UserCredential userCredential;
 
 }

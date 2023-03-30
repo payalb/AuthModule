@@ -18,5 +18,4 @@ public interface UserService {
 
 	public Optional<User> findUserById(int id);
 
-
 }

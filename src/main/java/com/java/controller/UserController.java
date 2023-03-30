@@ -104,7 +104,7 @@ public class UserController {
 	      throw new RuntimeException("UserName or Password is Empty");
 	    }
 	    Optional<UserCredential> userData = userCredentialService.findById(user.getUsername());
-	    if(userData.isEmpty() || !encoder.matches(userData.get().getPassword() , user.getPassword())){
+	    if(userData.isEmpty() || !encoder.matches( user.getPassword(), userData.get().getPassword() )){
 	       throw new RuntimeException("UserName or Password is Invalid");
 	    }
 	       return new ResponseEntity<>(tokenUtil.generateAccessToken(user), HttpStatus.OK);

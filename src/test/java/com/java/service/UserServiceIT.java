@@ -5,10 +5,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,6 +31,7 @@ import com.java.dto.UserInput;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+
 public class UserServiceIT {
 
 	@Autowired
@@ -53,6 +56,7 @@ public class UserServiceIT {
 	   * @throws Exception
 	   */
 	 @Test
+	 @WithMockUser(username="payal123!",authorities = {"ADMIN"})
 	// @Disabled("For testing")
 	  public void createUserWithRolesButNoPrivileges() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
@@ -88,8 +92,9 @@ public class UserServiceIT {
 	   * @throws JsonProcessingException
 	   * @throws Exception
 	   */
+	 @WithMockUser(username="payal123",authorities = {"ADMIN"})
 	  @Test
-	//  @Disabled("For testing")
+	  //@Disabled("For testing")
 	  public void createUserWithoutPrivilegesLaterAssignPrivilegesToRole() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
 		  UserInput user= new UserInput();
@@ -123,6 +128,8 @@ public class UserServiceIT {
 	  }
 	  
 	  @Test
+	  @WithMockUser(username="payal123",authorities = {"ADMIN"})
+	  //@Disabled
 	  public void createUserTestForTransactions() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
 		  UserInput user= new UserInput();

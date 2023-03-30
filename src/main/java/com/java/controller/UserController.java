@@ -24,7 +24,7 @@ import com.java.service.UserService;
 
 
 @RestController
-@RequestMapping(path = "users")
+@RequestMapping(path = "/v1/users")
 public class UserController {
 	
 	@Autowired UserService userService;

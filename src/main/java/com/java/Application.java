@@ -35,7 +35,7 @@ public class Application {
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
-				.paths(PathSelectors.ant("/users/**")).build();
+				.paths(PathSelectors.ant("/v*/users/**")).build();
 	}
 	@Bean
 	  public InternalResourceViewResolver defaultViewResolver() {

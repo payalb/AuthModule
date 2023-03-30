@@ -17,7 +17,7 @@ import com.java.dto.Role;
 import com.java.service.RolesService;
 
 @RestController
-@RequestMapping("/roles")
+@RequestMapping("/v1/roles")
 public class RolesController {
 
 	Logger logger  = Logger.getLogger( RolesController.class.getName());

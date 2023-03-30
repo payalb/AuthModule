@@ -27,7 +27,9 @@ public class RootUserInitializer implements CommandLineRunner {
 	@Autowired
 	UserService service;
 
-	@Autowired BCryptPasswordEncoder encoder;
+	@Autowired
+	BCryptPasswordEncoder encoder;
+
 	@Override
 	public void run(String... args) throws Exception {
 		User user = new User();

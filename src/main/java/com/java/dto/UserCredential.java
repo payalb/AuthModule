@@ -3,17 +3,12 @@ package com.java.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.spi.ValidationProvider;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,8 +30,7 @@ public class UserCredential {
 	private String password;
 	
 	@NotEmpty
-	@ManyToMany(fetch = FetchType.EAGER)
-	//@Cascade(CascadeType.SAVE_UPDATE)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@Builder.Default
 	private List<Role> roles= new ArrayList<>();
 	

@@ -1,5 +1,6 @@
 package com.java.dto;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -33,7 +34,7 @@ public class User{
 	private String address;
 	private long phoneNumber;
 	//Using OneToOne instead of Embedded to provide database table level grants
-	@OneToOne(fetch = FetchType.EAGER, optional = false)
+	@OneToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.PERSIST)
 	private UserCredential userCredential;
 
 }

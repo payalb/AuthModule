@@ -1,5 +1,6 @@
 package com.java.dto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -26,7 +27,7 @@ public class Privilege {
 	@JsonIgnore
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
-	private Set<Role> roles;
+	private Set<Role> roles= new HashSet<>();
 	
 	public Privilege( String pname) {
 		this.pname = pname;

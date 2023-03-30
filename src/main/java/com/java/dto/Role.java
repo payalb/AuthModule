@@ -1,5 +1,6 @@
 package com.java.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -27,7 +28,7 @@ public class Role {
 	@JoinTable(name = "role_privilege",
 	joinColumns = @JoinColumn(name = "rname", referencedColumnName = "rname"),
 	inverseJoinColumns = @JoinColumn(name = "pname", referencedColumnName = "pname"))
-	private List<Privilege> privileges;
+	private List<Privilege> privileges = new ArrayList<>();
 	
 	public Role(String rname){
 		this.rname= rname;

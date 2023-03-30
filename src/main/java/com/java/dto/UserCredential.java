@@ -1,5 +1,6 @@
 package com.java.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -29,6 +30,7 @@ public class UserCredential {
 	@NotEmpty
 	@ManyToMany(fetch = FetchType.EAGER)
 	//@Cascade(CascadeType.SAVE_UPDATE)
-	private List<Role> roles;
+	@Builder.Default
+	private List<Role> roles= new ArrayList<>();
 	
 }

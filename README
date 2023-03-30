@@ -1,1 +1,12 @@
 API documentation available at http://localhost:8080/swagger-ui/
+
+Exposed only user api. 
+Can expose privilege, role api if needed.
+
+Added unit and integration sample tests
+Added versioning
+Added hateos module. Not using it currently much. Not many associated resources
+Added spring transactions
+
+
+

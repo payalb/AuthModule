@@ -1,20 +1,27 @@
 package com.java.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.java.dao.PrivilegeRepository;
+import com.java.dao.RoleRepository;
 import com.java.dao.UserRepository;
 import com.java.dto.Privilege;
 import com.java.dto.Role;
@@ -37,13 +44,18 @@ public class UserServiceIT {
 	  
 	  @Autowired RolesService rolesService;
 		
+	  @Autowired PrivilegeRepository privilegeRepository;
+	  
+	  @MockBean RoleRepository roleRepository;
+	  
 	  /**
 	   * Test the user object and roles object saved properly. Privileges should not be there.
 	   * Creating a user with roles, but no privileges assigned yet
 	   * @throws JsonProcessingException
 	   * @throws Exception
 	   */
-	//  @Test
+	 @Test
+	// @Disabled("For testing")
 	  public void createUserWithRolesButNoPrivileges() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
 		  UserInput user= new UserInput();
@@ -55,7 +67,7 @@ public class UserServiceIT {
 		   user.setRoles(List.of(new Role("ADMIN")));
 		   
 		   
-		   mockMvc.perform(post("/users")
+		   mockMvc.perform(post("/v1/users")
 		            .contentType("application/json")
 		            .content(objectMapper.writeValueAsString(user)))
 		            .andExpect(status().isCreated());
@@ -79,6 +91,7 @@ public class UserServiceIT {
 	   * @throws Exception
 	   */
 	  @Test
+	//  @Disabled("For testing")
 	  public void createUserWithoutPrivilegesLaterAssignPrivilegesToRole() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
 		  UserInput user= new UserInput();
@@ -90,7 +103,7 @@ public class UserServiceIT {
 		   user.setRoles(List.of(new Role("ADMIN")));
 		   
 		   
-		   mockMvc.perform(post("/users")
+		   mockMvc.perform(post("/v1/users")
 		            .contentType("application/json")
 		            .content(objectMapper.writeValueAsString(user)))
 		            .andExpect(status().isCreated());
@@ -109,5 +122,30 @@ public class UserServiceIT {
 		   assertThat(roles.stream().flatMap(r-> r.getPrivileges().stream()).collect(Collectors.toList())).contains(new Privilege("DB_READ"));
 		   
 		   
+	  }
+	  
+	  @Test
+	  public void createUserTestForTransactions() throws JsonProcessingException, Exception {
+		  System.out.println("In createUser!");
+		  UserInput user= new UserInput();
+		   user.setName("Payal");
+		   user.setAddress("10R delhi road");
+		   user.setPhoneNumber(7326786232l);
+		   user.setPassword("abc");
+		   user.setUsername("abc");
+		   user.setRoles(List.of(new Role("ADMIN", List.of(new Privilege("DB_WRITE"), new Privilege("DB_READ")))));
+		   
+		   when(roleRepository.save(any())).thenThrow(new RuntimeException());
+		   try {
+		   mockMvc.perform(post("/v1/users")
+		            .contentType("application/json")
+		            .content(objectMapper.writeValueAsString(user)))
+		            .andExpect(status().isCreated());
+		   }catch(Exception e) {}
+		 
+		   List<User> userObjects = userRepository.findAll();
+		   assertThat(userObjects.size()).isEqualTo(0);
+		   assertThat(roleRepository.findAll().size()).isEqualTo(0);
+		   assertThat(privilegeRepository.findAll().size()).isEqualTo(0);
 	  }
 }

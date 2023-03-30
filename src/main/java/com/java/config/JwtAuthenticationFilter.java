@@ -1,8 +1,6 @@
 package com.java.config;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -11,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -20,9 +17,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.java.constants.JWTConstants;
 import com.java.service.UserService;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -44,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			authToken = header.replace(JWTConstants.TOKEN_PREFIX, "");
 
 			username = jwtTokenUtil.getUsernameFromToken(authToken);
-			UserDetails userDetails = null ;
+			UserDetails userDetails = null;
 			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 				userDetails = jwtUserDetailsService.loadUserByUsername(username);
 				if (jwtTokenUtil.validateToken(authToken, userDetails)) {
@@ -57,8 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				}
 			}
 		}
-			filterChain.doFilter(httpServletRequest, httpServletResponse);
-			
-		}
-	
+		filterChain.doFilter(httpServletRequest, httpServletResponse);
+
+	}
+
 }

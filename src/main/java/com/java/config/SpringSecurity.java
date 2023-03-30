@@ -63,6 +63,7 @@ public class SpringSecurity {
 		http.authorizeRequests()
         .antMatchers(HttpMethod.POST, "/v1/users/login").permitAll()
         .antMatchers("/h2-console/**").permitAll()
+        .antMatchers("/swagger-ui/**").permitAll()
         .anyRequest().authenticated();
 		return http.build();
 

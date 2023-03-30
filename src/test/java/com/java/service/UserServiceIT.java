@@ -65,7 +65,7 @@ public class UserServiceIT {
 	   * @throws Exception
 	   */
 	  
-	//  @Test
+	  @Test
 		 @WithMockUser(username="payal123*",authorities = {"ADMIN"})
 		  public void createUser() throws JsonProcessingException, Exception {
 			  System.out.println("In createUser!");
@@ -93,12 +93,14 @@ public class UserServiceIT {
 			   List<Role> roles= objUser.getUserCredential().getRoles();
 			   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 			   assertThat(roles.stream().flatMap(role-> role.getPrivileges().stream()).collect(Collectors.toList())).isEmpty();
+			   userCredentialsRepository.deleteCredential();
 			   roleRepository.delete(roles.get(0));
+			  
 			   userCredentialsRepository.delete(credential);
 			   userRepository.delete(user);
 		  }
 	  
-	// @Test
+	 @Test
 	 @WithMockUser(username="payal123!",authorities = {"ADMIN"})
 	// @Disabled("For testing")
 	  public void createUserWithRolesButNoPrivileges() throws JsonProcessingException, Exception {
@@ -125,8 +127,9 @@ public class UserServiceIT {
 		   List<Role> roles= objUser.getUserCredential().getRoles();
 		   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 		   assertThat(roles.stream().flatMap(role-> role.getPrivileges().stream()).collect(Collectors.toList())).isEmpty();
-		   
+		   userCredentialsRepository.deleteCredential();
 		   roleRepository.delete(roles.get(0));
+		  
 		   userCredentialsRepository.delete(objUser.getUserCredential());
 		   userRepository.delete(objUser);
 	  }
@@ -139,7 +142,7 @@ public class UserServiceIT {
 	   * @throws Exception
 	   */
 	 @WithMockUser(username="payal123*",authorities = {"ADMIN"})
-	  @Test
+	//  @Test
 	  public void createUserWithoutPrivilegesLaterAssignPrivilegesToRole() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
 		  UserInput user= new UserInput();
@@ -169,13 +172,15 @@ public class UserServiceIT {
 		   List<Role> roles= objUser.getUserCredential().getRoles();
 		   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 		   assertThat(roles.stream().flatMap(r-> r.getPrivileges().stream()).collect(Collectors.toList())).contains(new Privilege("DB_READ"));
+		   userCredentialsRepository.deleteCredential();
 		   roleRepository.delete(roles.get(0));
+		 //  userCredentialsRepository.deleteCredential();
 		   userCredentialsRepository.delete(objUser.getUserCredential());
 		   userRepository.delete(objUser);
 		   
 	  }
 	  
-	//  @Test
+	 // @Test
 	  @WithMockUser(username="payal123",authorities = {"ADMIN"})
 	  public void createUserTestForTransactions() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");

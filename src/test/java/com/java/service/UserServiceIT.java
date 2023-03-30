@@ -93,7 +93,7 @@ public class UserServiceIT {
 			   List<Role> roles= objUser.getUserCredential().getRoles();
 			   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 			   assertThat(roles.stream().flatMap(role-> role.getPrivileges().stream()).collect(Collectors.toList())).isEmpty();
-			   userCredentialsRepository.deleteCredential();
+			   userCredentialsRepository.cleanup();
 			  
 		  }
 	  
@@ -124,7 +124,7 @@ public class UserServiceIT {
 		   List<Role> roles= objUser.getUserCredential().getRoles();
 		   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 		   assertThat(roles.stream().flatMap(role-> role.getPrivileges().stream()).collect(Collectors.toList())).isEmpty();
-		   userCredentialsRepository.deleteCredential();
+		   userCredentialsRepository.cleanup();
 		  
 	  }
 	  
@@ -136,7 +136,7 @@ public class UserServiceIT {
 	   * @throws Exception
 	   */
 	 @WithMockUser(username="payal123*",authorities = {"ADMIN"})
-	//  @Test
+	  @Test
 	  public void createUserWithoutPrivilegesLaterAssignPrivilegesToRole() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
 		  UserInput user= new UserInput();
@@ -166,7 +166,7 @@ public class UserServiceIT {
 		   List<Role> roles= objUser.getUserCredential().getRoles();
 		   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 		   assertThat(roles.stream().flatMap(r-> r.getPrivileges().stream()).collect(Collectors.toList())).contains(new Privilege("DB_READ"));
-		   userCredentialsRepository.deleteCredential();
+		   userCredentialsRepository.cleanup();
 		   
 	  }
 	  

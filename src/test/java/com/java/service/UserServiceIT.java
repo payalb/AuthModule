@@ -94,10 +94,7 @@ public class UserServiceIT {
 			   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 			   assertThat(roles.stream().flatMap(role-> role.getPrivileges().stream()).collect(Collectors.toList())).isEmpty();
 			   userCredentialsRepository.deleteCredential();
-			   roleRepository.delete(roles.get(0));
 			  
-			   userCredentialsRepository.delete(credential);
-			   userRepository.delete(user);
 		  }
 	  
 	 @Test
@@ -128,10 +125,7 @@ public class UserServiceIT {
 		   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 		   assertThat(roles.stream().flatMap(role-> role.getPrivileges().stream()).collect(Collectors.toList())).isEmpty();
 		   userCredentialsRepository.deleteCredential();
-		   roleRepository.delete(roles.get(0));
 		  
-		   userCredentialsRepository.delete(objUser.getUserCredential());
-		   userRepository.delete(objUser);
 	  }
 	  
 	  /**
@@ -173,10 +167,6 @@ public class UserServiceIT {
 		   assertThat(roles).containsAnyOf(new Role("ADMIN"));
 		   assertThat(roles.stream().flatMap(r-> r.getPrivileges().stream()).collect(Collectors.toList())).contains(new Privilege("DB_READ"));
 		   userCredentialsRepository.deleteCredential();
-		   roleRepository.delete(roles.get(0));
-		 //  userCredentialsRepository.deleteCredential();
-		   userCredentialsRepository.delete(objUser.getUserCredential());
-		   userRepository.delete(objUser);
 		   
 	  }
 	  

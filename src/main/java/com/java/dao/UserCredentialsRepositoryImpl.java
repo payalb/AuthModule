@@ -16,6 +16,15 @@ public class UserCredentialsRepositoryImpl implements UserCredentialsRepositoryC
 	public void deleteCredential() {
 		Query query = entityManager.createNativeQuery("delete from user_credential_roles");
 		query.executeUpdate();
+		query = entityManager.createNativeQuery("update userinfo set user_credential_username = null");
+		query.executeUpdate();
+		 query = entityManager.createNativeQuery("delete from user_credential");
+		query.executeUpdate();
+		 query = entityManager.createNativeQuery("delete from userrole");
+			query.executeUpdate();
+		query = entityManager.createNativeQuery("delete from userinfo");
+		query.executeUpdate();
+	
 		
 	}
 

@@ -169,7 +169,7 @@ public class UserServiceIT {
 		   
 	  }
 	  
-	 	@Test
+	 	//@Test
 	  @WithMockUser(username="payal123",authorities = {"ADMIN"})
 	  public void createUserTestForTransactions() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");

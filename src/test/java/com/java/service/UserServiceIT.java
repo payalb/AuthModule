@@ -3,7 +3,6 @@ package com.java.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -170,7 +169,7 @@ public class UserServiceIT {
 		   
 	  }
 	  
-	 // @Test
+	 	@Test
 	  @WithMockUser(username="payal123",authorities = {"ADMIN"})
 	  public void createUserTestForTransactions() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
@@ -194,6 +193,6 @@ public class UserServiceIT {
 		   assertThat(userObjects.size()).isEqualTo(0);
 		   assertThat(roleRepository.findAll().size()).isEqualTo(0);
 		   assertThat(privilegeRepository.findAll().size()).isEqualTo(0);
-		 
+		   userCredentialsRepository.cleanup();
 	  }
 }

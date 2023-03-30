@@ -22,10 +22,7 @@ public class RolesServiceImpl implements RolesService {
 	@Override
 	public Role save(Role role) {
 		role.getPrivileges().forEach(p -> {
-			try {
 				privilegeRepository.save(p);
-			} catch (EntityExistsException e) {
-			}
 		});
 		return roleRepository.save(role);
 	}

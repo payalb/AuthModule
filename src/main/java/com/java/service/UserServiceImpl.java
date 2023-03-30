@@ -24,7 +24,7 @@ import com.java.dto.UserCredential;
 
 
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 public class UserServiceImpl implements UserService{
 
 	@Autowired UserRepository repository;

@@ -23,7 +23,7 @@ import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@EnableTransactionManagement(proxyTargetClass = false)
+@EnableTransactionManagement(proxyTargetClass = true)
 @EnableWebMvc
 @EnableSwagger2
 public class Application {

@@ -33,12 +33,7 @@ public class UserOutput {
 	public static UserOutput getInstance(User user) {
 		 Map<String, List<String>> roles= new HashMap<>();
 		 user.getUserCredential().getRoles().stream().forEach(x-> {
-			try {
 				roles.put(x.getRname(), x.getPrivileges().stream().map((Privilege y)-> y.getPname()).collect(Collectors.toList()));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		});
 		System.out.println("user credential is "+ user.getUserCredential());
 		return UserOutput.builder().name(user.getName()).userId(user.getUserId()).address(user.getAddress())

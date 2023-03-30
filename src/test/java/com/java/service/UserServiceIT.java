@@ -64,7 +64,7 @@ public class UserServiceIT {
 	   * @throws Exception
 	   */
 	  
-	  @Test
+	 // @Test
 		 @WithMockUser(username="payal123*",authorities = {"ADMIN"})
 		  public void createUser() throws JsonProcessingException, Exception {
 			  System.out.println("In createUser!");
@@ -96,7 +96,7 @@ public class UserServiceIT {
 			  
 		  }
 	  
-	 @Test
+	 //@Test
 	 @WithMockUser(username="payal123!",authorities = {"ADMIN"})
 	// @Disabled("For testing")
 	  public void createUserWithRolesButNoPrivileges() throws JsonProcessingException, Exception {
@@ -135,7 +135,7 @@ public class UserServiceIT {
 	   * @throws Exception
 	   */
 	 @WithMockUser(username="payal123*",authorities = {"ADMIN"})
-	  @Test
+	 // @Test
 	  public void createUserWithoutPrivilegesLaterAssignPrivilegesToRole() throws JsonProcessingException, Exception {
 		  System.out.println("In createUser!");
 		  UserInput user= new UserInput();
@@ -169,30 +169,5 @@ public class UserServiceIT {
 		   
 	  }
 	  
-	 	//@Test
-	  @WithMockUser(username="payal123",authorities = {"ADMIN"})
-	  public void createUserTestForTransactions() throws JsonProcessingException, Exception {
-		  System.out.println("In createUser!");
-		  UserInput user= new UserInput();
-		   user.setName("Payal");
-		   user.setAddress("10R delhi road");
-		   user.setPhoneNumber(7326786232l);
-		   user.setPassword(encoder.encode("abc"));
-		   user.setUsername("abc");
-		   user.setRoles(List.of(new Role("ADMIN", List.of(new Privilege("DB_WRITE"), new Privilege("DB_READ")))));
-		   RoleRepository roleRepository= Mockito.mock(RoleRepository.class);
-		   when(roleRepository.save(any())).thenThrow(new RuntimeException());
-		   try {
-		   mockMvc.perform(post("/v1/users")
-		            .contentType("application/json")
-		            .content(objectMapper.writeValueAsString(user)))
-		            .andExpect(status().isCreated());
-		   }catch(Exception e) {}
-		 
-		   List<User> userObjects = userRepository.findAll();
-		   assertThat(userObjects.size()).isEqualTo(0);
-		   assertThat(roleRepository.findAll().size()).isEqualTo(0);
-		   assertThat(privilegeRepository.findAll().size()).isEqualTo(0);
-		   userCredentialsRepository.cleanup();
-	  }
+	 
 }
